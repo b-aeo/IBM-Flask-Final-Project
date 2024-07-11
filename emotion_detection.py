@@ -10,6 +10,13 @@ def emotion_detector(text_to_analyze):
     text = { "raw_document": { "text": text_to_analyze } }
     response = requests.post(url, headers = headers, json = text, timeout = 30)
     json_response = json.loads(response.text)
-    format_response = json_response['emotionPredictions']['emotion']
-
-    return format_response
+    format_response = json_response['emotionPredictions'][0]['emotion']
+    final_response = {
+    'anger': format_response['anger'],
+    'disgust': format_response['disgust'],
+    'fear': format_response['fear'],
+    'joy': format_response['joy'],
+    'sadness': format_response['sadness'],
+    'dominant_emotion': max(format_response, key = format_response.get)
+    }
+    return final_response
